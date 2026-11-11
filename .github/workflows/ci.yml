@@ -1,0 +1,74 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  linux:
+    runs-on: ubuntu-latest
+    container: swift:6.2
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build
+        run: swift build
+      - name: Test
+        run: swift test --parallel
+
+  macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build
+        run: swift build
+      - name: Test
+        run: swift test
+
+  app:
+    # The app targets the macOS 27 SDK, which may not be on hosted runners yet, so a
+    # failure here does not fail the workflow.
+    runs-on: macos-latest
+    continue-on-error: true
+    needs: macos
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check for app project
+        id: app
+        run: |
+          if [ -f Apps/ISingItApp/project.yml ]; then
+            echo "present=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "present=false" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Install xcodegen
+        if: steps.app.outputs.present == 'true'
+        run: brew install xcodegen
+      - name: Generate Xcode project
+        if: steps.app.outputs.present == 'true'
+        run: xcodegen generate --spec Apps/ISingItApp/project.yml
+      - name: Build app
+        if: steps.app.outputs.present == 'true'
+        run: >
+          xcodebuild -project Apps/ISingItApp/ISingItApp.xcodeproj
+          -scheme ISingIt -configuration Debug -destination 'platform=macOS'
+          CODE_SIGNING_ALLOWED=NO build
+
+  bench:
+    runs-on: ubuntu-latest
+    container: swift:6.2
+    needs: linux
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build release
+        run: swift build -c release
+      - name: Run benchmark
+        run: .build/release/isingit bench Fixtures/MusicXML/amazing_grace.musicxml | tee bench.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: bench
+          path: bench.json

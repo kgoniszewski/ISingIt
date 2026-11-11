@@ -1,0 +1,125 @@
+{
+  "mean_wer": 0.3058333333333333,
+  "results": [
+    {
+      "voice": "dsp-soprano",
+      "song": "twinkle.musicxml",
+      "wer": 0.1,
+      "heard": "Twinkle, twinkle, little star, I wonder what you are."
+    },
+    {
+      "voice": "dsp-soprano",
+      "song": "amazing_grace.musicxml",
+      "wer": 0.25,
+      "heard": "Amazing race, all sweet, the sound that saves a wretch like me."
+    },
+    {
+      "voice": "dsp-soprano",
+      "song": "two_parts.musicxml",
+      "wer": 0.4,
+      "heard": "Merry and a little lamb!"
+    },
+    {
+      "voice": "dsp-soprano",
+      "song": "rests_and_dots.musicxml",
+      "wer": 0.0,
+      "heard": "Hello, my friend, La."
+    },
+    {
+      "voice": "dsp-soprano",
+      "song": "twinkle_nolyrics.mid",
+      "wer": 0.1,
+      "heard": "Twinkle, twinkle, little star, I wonder what you are."
+    },
+    {
+      "voice": "dsp-alto",
+      "song": "twinkle.musicxml",
+      "wer": 0.1,
+      "heard": "Twinkle, twinkle, little star, oh, I wonder what you are."
+    },
+    {
+      "voice": "dsp-alto",
+      "song": "amazing_grace.musicxml",
+      "wer": 1.25,
+      "heard": "Amazing race, oh sweet love, oh let's change the race, oh sweet love, oh let's change the race."
+    },
+    {
+      "voice": "dsp-alto",
+      "song": "two_parts.musicxml",
+      "wer": 0.4,
+      "heard": "Mary and the little lamb!"
+    },
+    {
+      "voice": "dsp-alto",
+      "song": "rests_and_dots.musicxml",
+      "wer": 0.0,
+      "heard": "Hello, my friend, La."
+    },
+    {
+      "voice": "dsp-alto",
+      "song": "twinkle_nolyrics.mid",
+      "wer": 0.1,
+      "heard": "Twinkle, twinkle, little star, oh, I wonder what you are."
+    },
+    {
+      "voice": "dsp-tenor",
+      "song": "twinkle.musicxml",
+      "wer": 0.1,
+      "heard": "Twinkle, twinkle, little star, oh, I wonder what you are."
+    },
+    {
+      "voice": "dsp-tenor",
+      "song": "amazing_grace.musicxml",
+      "wer": 0.5833333333333334,
+      "heard": "Amazing race, how sweet the sound Let's sing the race lively!"
+    },
+    {
+      "voice": "dsp-tenor",
+      "song": "two_parts.musicxml",
+      "wer": 0.6,
+      "heard": "Merry and all, little lamb!"
+    },
+    {
+      "voice": "dsp-tenor",
+      "song": "rests_and_dots.musicxml",
+      "wer": 0.0,
+      "heard": "Hello, my friend, La."
+    },
+    {
+      "voice": "dsp-tenor",
+      "song": "twinkle_nolyrics.mid",
+      "wer": 0.1,
+      "heard": "Twinkle, twinkle, little star, oh, I wonder what you are."
+    },
+    {
+      "voice": "dsp-bass",
+      "song": "twinkle.musicxml",
+      "wer": 0.3,
+      "heard": "Little, little star, oh, I wonder what you are."
+    },
+    {
+      "voice": "dsp-bass",
+      "song": "amazing_grace.musicxml",
+      "wer": 0.8333333333333334,
+      "heard": "Amazing race, Oh sweet love, Oh, Amazing Lifely."
+    },
+    {
+      "voice": "dsp-bass",
+      "song": "two_parts.musicxml",
+      "wer": 0.6,
+      "heard": "Mary and Ollie, the lamb!"
+    },
+    {
+      "voice": "dsp-bass",
+      "song": "rests_and_dots.musicxml",
+      "wer": 0.0,
+      "heard": "Hello, my friend, La."
+    },
+    {
+      "voice": "dsp-bass",
+      "song": "twinkle_nolyrics.mid",
+      "wer": 0.3,
+      "heard": "Little, little star, oh, I wonder what you are."
+    }
+  ]
+}

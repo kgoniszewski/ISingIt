@@ -1,0 +1,85 @@
+# XcodeGen spec for the iSingIt Mac app.
+#   brew install xcodegen
+#   xcodegen generate --spec Apps/ISingItApp/project.yml
+#   open Apps/ISingItApp/ISingItApp.xcodeproj
+name: ISingItApp
+options:
+  bundleIdPrefix: app.isingit
+  deploymentTarget:
+    macOS: "27.0"
+  createIntermediateGroups: true
+packages:
+  ISingIt:
+    path: ../..
+settings:
+  base:
+    # Swift 6 compiler, Swift 5 language mode: the app has not been compiled on a Mac yet,
+    # so strict-concurrency findings are warnings for now. Switch to "6.0" once it builds clean.
+    SWIFT_VERSION: "5.0"
+    SWIFT_STRICT_CONCURRENCY: complete
+    MARKETING_VERSION: "0.1.0"
+    CURRENT_PROJECT_VERSION: "1"
+    DEVELOPMENT_TEAM: ""
+    ENABLE_HARDENED_RUNTIME: YES
+targets:
+  ISingIt:
+    type: application
+    platform: macOS
+    sources:
+      - path: Sources
+    dependencies:
+      - package: ISingIt
+        product: ISingItEngine
+    entitlements:
+      path: Support/ISingIt.entitlements
+      properties:
+        com.apple.security.app-sandbox: true
+        com.apple.security.files.user-selected.read-write: true
+    info:
+      path: Support/Info.plist
+      properties:
+        CFBundleDisplayName: iSingIt
+        LSApplicationCategoryType: public.app-category.music
+        NSHumanReadableCopyright: "iSingIt is free software under the GNU GPL v3."
+        CFBundleDocumentTypes:
+          - CFBundleTypeName: iSingIt Project
+            CFBundleTypeRole: Editor
+            LSHandlerRank: Owner
+            LSItemContentTypes: [app.isingit.project]
+          - CFBundleTypeName: MusicXML
+            CFBundleTypeRole: Viewer
+            LSHandlerRank: Alternate
+            LSItemContentTypes: [org.musicxml.musicxml, com.recordare.musicxml.uncompressed, com.recordare.musicxml]
+          - CFBundleTypeName: MIDI
+            CFBundleTypeRole: Viewer
+            LSHandlerRank: Alternate
+            LSItemContentTypes: [public.midi-audio]
+        UTExportedTypeDeclarations:
+          - UTTypeIdentifier: app.isingit.project
+            UTTypeDescription: iSingIt Project
+            UTTypeConformsTo: [public.json, public.data]
+            UTTypeTagSpecification:
+              public.filename-extension: [isingit]
+        UTImportedTypeDeclarations:
+          - UTTypeIdentifier: org.musicxml.musicxml
+            UTTypeDescription: MusicXML
+            UTTypeConformsTo: [public.xml]
+            UTTypeTagSpecification:
+              public.filename-extension: [musicxml]
+          - UTTypeIdentifier: com.recordare.musicxml.uncompressed
+            UTTypeDescription: MusicXML (XML)
+            UTTypeConformsTo: [public.xml]
+            UTTypeTagSpecification:
+              public.filename-extension: [xml]
+          - UTTypeIdentifier: com.recordare.musicxml
+            UTTypeDescription: Compressed MusicXML
+            UTTypeConformsTo: [public.zip-archive]
+            UTTypeTagSpecification:
+              public.filename-extension: [mxl]
+schemes:
+  ISingIt:
+    build:
+      targets:
+        ISingIt: all
+    run:
+      config: Debug
