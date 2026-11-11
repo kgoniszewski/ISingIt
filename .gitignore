@@ -1,0 +1,9 @@
+.build/
+.swiftpm/
+*.xcodeproj/
+DerivedData/
+.DS_Store
+__pycache__/
+*.wav
+!Tests/**/*.wav
+bench/results/*.tmp
