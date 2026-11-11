@@ -14,6 +14,8 @@ struct SongEditorView: View {
     @State private var pastedLyrics = ""
     @State private var alignmentWarnings: [AlignmentWarning] = []
     @State private var exporting = false
+    @State private var exportDocument = WAVExportDocument()
+    @FocusState private var rollFocused: Bool
     @State private var showInspector = true
 
     struct LyricEdit: Identifiable {
@@ -34,6 +36,19 @@ struct SongEditorView: View {
                 let lyric = project.score.notes.first { $0.id == id }?.lyric
                 lyricEditing = LyricEdit(id: id, text: lyric.map { $0.kind.continuesWord ? $0.text + "-" : $0.text } ?? "")
             })
+        // Space and Delete are handled here, not as menu shortcuts, so they still type
+        // normally in text fields.
+        .focusable()
+        .focusEffectDisabled()
+        .focused($rollFocused)
+        .onKeyPress(.space) {
+            playback.togglePlayback(project)
+            return .handled
+        }
+        .onKeyPress(keys: [.delete, .deleteForward]) { _ in
+            deleteSelection()
+            return .handled
+        }
         .inspector(isPresented: $showInspector) {
             InspectorView(
                 document: $document, selection: selection, playback: playback,
@@ -60,7 +75,14 @@ struct SongEditorView: View {
             ToolbarItemGroup {
                 Button { showingLyricsSheet = true } label: { Label("Lyrics", systemImage: "text.quote") }
                     .help("Paste lyrics onto the notes")
-                Button { exporting = true } label: { Label("Export", systemImage: "square.and.arrow.up") }
+                Button {
+                    // Render first, so the save panel writes the finished file itself.
+                    let current = project
+                    Task {
+                        exportDocument = WAVExportDocument(data: await playback.wavData(current))
+                        exporting = true
+                    }
+                } label: { Label("Export", systemImage: "square.and.arrow.up") }
                     .help("Export the vocal as a WAV file")
                 Button { showInspector.toggle() } label: { Label("Inspector", systemImage: "sidebar.right") }
             }
@@ -85,19 +107,21 @@ struct SongEditorView: View {
             }
         }
         .fileExporter(
-            isPresented: $exporting, document: WAVExportDocument(), contentType: .wav,
+            isPresented: $exporting, document: exportDocument, contentType: .wav,
             defaultFilename: (project.score.title ?? "vocal") + ".wav"
-        ) { result in
-            guard case .success(let url) = result else { return }
-            let current = project
-            Task { try? await playback.exportWAV(current, to: url) }
+        ) { _ in }
+        .onAppear {
+            rollFocused = true
+            playback.scheduleRender(project)
         }
-        .onAppear { playback.scheduleRender(project) }
         .onChange(of: project) { _, newValue in playback.scheduleRender(newValue) }
         .onReceive(NotificationCenter.default.publisher(for: .togglePlayback)) { _ in playback.togglePlayback(project) }
         .onReceive(NotificationCenter.default.publisher(for: .deleteSelectedNote)) { _ in deleteSelection() }
-        .alert("Playback problem", isPresented: .constant(playback.errorMessage != nil)) {
-            Button("OK") {}
+        .alert("Playback problem", isPresented: Binding(
+            get: { playback.errorMessage != nil },
+            set: { if !$0 { playback.clearError() } })
+        ) {
+            Button("OK") { playback.clearError() }
         } message: {
             Text(playback.errorMessage ?? "")
         }
@@ -170,13 +194,19 @@ struct SongEditorView: View {
     static let shared = UndoTarget()
 }
 
-/// Exports are written by PlaybackEngine; this only satisfies `fileExporter`.
+/// A rendered WAV file handed to the save panel.
 struct WAVExportDocument: FileDocument {
     static let readableContentTypes: [UTType] = [.wav]
-    init() {}
-    init(configuration: ReadConfiguration) throws {}
+    var data = Data()
+
+    init(data: Data = Data()) { self.data = data }
+
+    init(configuration: ReadConfiguration) throws {
+        data = configuration.file.regularFileContents ?? Data()
+    }
+
     func fileWrapper(configuration: WriteConfiguration) throws -> FileWrapper {
-        FileWrapper(regularFileWithContents: Data())
+        FileWrapper(regularFileWithContents: data)
     }
 }
 

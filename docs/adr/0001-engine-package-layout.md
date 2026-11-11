@@ -1,6 +1,6 @@
 # ADR 0001: One Swift package, one module per pipeline stage, buildable on Linux
 
-Status: accepted (phase 1), needs director sign-off
+Status: accepted by the director on 2026-11-11 (docs/reviews/phase1-director-review.md)
 
 ## Context
 The plan calls for one Swift engine package shared by the app, the AUv3 plugin and the

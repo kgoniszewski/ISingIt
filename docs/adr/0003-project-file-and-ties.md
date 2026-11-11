@@ -1,6 +1,6 @@
 # ADR 0003: Phase 1 project file is one JSON file; ties are merged at import
 
-Status: accepted (phase 1), needs director sign-off
+Status: accepted by the director on 2026-11-11 (docs/reviews/phase1-director-review.md)
 
 ## Decision
 - `.isingit` is a single JSON file (`Project`: format version, Score IR, render settings).

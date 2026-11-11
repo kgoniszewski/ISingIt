@@ -68,6 +68,7 @@ public struct Renderer: Sendable {
     /// Fills in phonemes the score does not have yet.
     public func prepare(_ score: Score) -> Score {
         var prepared = score
+        prepared.normalize()  // editing can leave notes overlapping; sing a clean line
         Phonemizer(language: score.language).apply(to: &prepared)
         return prepared
     }

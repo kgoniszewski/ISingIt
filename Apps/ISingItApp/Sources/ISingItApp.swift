@@ -10,18 +10,16 @@ struct ISingItApp: App {
                 .frame(minWidth: 900, minHeight: 560)
         }
         .commands {
-            CommandGroup(after: .pasteboard) {
-                Divider()
-                Button("Delete Note") {
-                    NotificationCenter.default.post(name: .deleteSelectedNote, object: nil)
-                }
-                .keyboardShortcut(.delete, modifiers: [])
-            }
             CommandMenu("Playback") {
+                // Space also plays and stops while the piano roll has focus.
                 Button("Play / Stop") {
                     NotificationCenter.default.post(name: .togglePlayback, object: nil)
                 }
-                .keyboardShortcut(.space, modifiers: [])
+                .keyboardShortcut(.return, modifiers: .command)
+                Button("Delete Selected Note") {
+                    NotificationCenter.default.post(name: .deleteSelectedNote, object: nil)
+                }
+                .keyboardShortcut(.delete, modifiers: .command)
             }
         }
     }

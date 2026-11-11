@@ -125,11 +125,13 @@ final class PlaybackEngine {
         position = 0
     }
 
-    /// Writes the current render to a WAV file.
-    func exportWAV(_ project: Project, to url: URL) async throws {
+    func clearError() { errorMessage = nil }
+
+    /// Renders the song at full level and returns it as a 24-bit WAV file.
+    func wavData(_ project: Project) async -> Data {
         var settings = project.settings
         settings.normalize = true
         let result = await renderer.render(project.score, settings: settings)
-        try WAVFile.write(result.audio, to: url, format: .pcm24)
+        return WAVFile.data(result.audio, format: .pcm24)
     }
 }

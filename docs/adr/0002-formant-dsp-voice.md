@@ -1,6 +1,6 @@
 # ADR 0002: Phase 1 DSP voice is a formant synthesizer, not WORLD + phoneme bank
 
-Status: accepted (phase 1), needs director sign-off
+Status: accepted by the director on 2026-11-11 (docs/reviews/phase1-director-review.md)
 
 ## Context
 The plan's baseline voice is the WORLD vocoder driven by a small recorded phoneme bank.
