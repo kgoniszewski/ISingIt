@@ -1,0 +1,2 @@
+{"audio_seconds": 18.623333333333335, "cached_rerender_seconds": 0.0012222528457641602, "notes": 15, "real_time_factor_best": 0.0018521692621829536, "render_seconds_best": 0.03449356555938721, "render_seconds_mean": 0.05520665645599365, "runs": 5}
+{"audio_seconds": 10.02, "cached_rerender_seconds": 0.0005917549133300781, "notes": 14, "real_time_factor_best": 0.001687977366342754, "render_seconds_best": 0.016913533210754395, "render_seconds_mean": 0.03815157413482666, "runs": 5}

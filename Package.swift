@@ -62,7 +62,8 @@ let package = Package(
 
         .testTarget(
             name: "ISingItEngineTests",
-            dependencies: ["ISingItEngine"]
+            dependencies: ["ISingItEngine"],
+            exclude: ["Golden"]
         ),
     ]
 )

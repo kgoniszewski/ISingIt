@@ -42,9 +42,16 @@ public enum ScoreImporter {
         case .musicXML:
             return try MusicXMLImporter().importScore(from: data, fileName: fileName, partID: part)
         case .project:
+            // An iSingIt project ({"score": ..., "settings": ...}) or a bare Score IR file.
+            if let project = try? JSONDecoder().decode(ProjectScore.self, from: data) { return project.score }
             return try Score.fromJSON(data)
         case nil:
             throw ImportError.unsupportedFile(fileName)
         }
     }
+}
+
+/// Reads just the score out of an iSingIt project file.
+private struct ProjectScore: Decodable {
+    var score: Score
 }
